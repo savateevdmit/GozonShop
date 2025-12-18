@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>гоzон • личный кабинет</title>
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="topbar">
+    <div class="brand">
+        <div class="logo">гоzон🎄</div>
+        <div class="tag">личный кабинет</div>
+    </div>
+</header>
+
+<main class="grid">
+    <section class="card">
+        <h2>Пользователь</h2>
+
+        <div class="row">
+            <label class="lbl">x-user-id</label>
+            <input id="userId" class="inp inp-wide" placeholder="guid пользователя"/>
+        </div>
+
+        <div class="row">
+            <button id="genUser" class="btn">Сгенерировать</button>
+            <button id="saveUser" class="btn btn-ghost">Сохранить</button>
+            <button id="clearUser" class="btn btn-ghost danger">Очистить</button>
+        </div>
+
+        <div class="hint">
+            все запросы отправляются через api gateway и содержат заголовок <code>X-User-Id</code>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Счет</h2>
+
+        <div class="row">
+            <button id="createAccount" class="btn">Создать счет</button>
+            <button id="refreshBalance" class="btn btn-ghost">Обновить баланс</button>
+        </div>
+
+        <div class="row">
+            <label class="lbl">Пополнение</label>
+            <input id="topupAmount" class="inp" type="number" min="1" value="10000"/>
+            <button id="topupBtn" class="btn">Пополнить</button>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-box">
+                <div class="kpi-title">Баланс</div>
+                <div id="balanceVal" class="kpi-value">—</div>
+                <div class="kpi-sub">Руб.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card span2">
+        <h2>Заказы</h2>
+
+        <div class="row">
+            <label class="lbl">сумма</label>
+            <input id="orderAmount" class="inp" type="number" min="1" value="3000"/>
+
+            <label class="lbl">описание</label>
+            <input id="orderDesc" class="inp inp-wide" placeholder="например: подарки" value="заказ к новому году"/>
+
+            <button id="createOrder" class="btn">Создать заказ</button>
+        </div>
+
+        <div class="row">
+            <button id="reloadOrders" class="btn btn-ghost">обновить список</button>
+
+            <label class="chk">
+                <input id="autoRefresh" type="checkbox" checked/>
+                автообновление
+            </label>
+
+            <label class="lbl">интервал</label>
+            <select id="refreshEvery" class="inp">
+                <option value="2000">2 сек</option>
+                <option value="4000" selected>4 сек</option>
+                <option value="8000">8 сек</option>
+            </select>
+
+            <div class="spacer"></div>
+
+            <label class="lbl">статус по id</label>
+            <input id="orderIdLookup" class="inp inp-wide" placeholder="guid заказа"/>
+            <button id="lookupBtn" class="btn btn-ghost">проверить</button>
+        </div>
+
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                <tr>
+                    <th>создан</th>
+                    <th>id заказа</th>
+                    <th class="right">сумма</th>
+                    <th>статус</th>
+                    <th>описание</th>
+                    <th class="right">действия</th>
+                </tr>
+                </thead>
+                <tbody id="ordersBody">
+                <tr><td colspan="6" class="muted">нет данных</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card span2">
+        <h2>Журнал</h2>
+        <div class="row">
+            <button id="clearLog" class="btn btn-ghost danger">Очистить</button>
+        </div>
+        <pre id="log" class="log"></pre>
+    </section>
+</main>
+
+<footer class="footer">
+    <div>КПО ДЗ4</div>
+    <div>Сервис общается с backend через rest api (gateway)</div>
+    <div>С Новым годом! 🎄</div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

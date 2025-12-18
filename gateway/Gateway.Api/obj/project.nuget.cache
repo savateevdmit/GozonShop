@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "fZEavUKvuFk=",
+  "success": true,
+  "projectFilePath": "C:\\Projects\\2 course\\KPO\\hw44\\GozonShop\\gateway\\Gateway.Api\\Gateway.Api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\savat\\.nuget\\packages\\system.io.hashing\\8.0.0\\system.io.hashing.8.0.0.nupkg.sha512",
+    "C:\\Users\\savat\\.nuget\\packages\\yarp.reverseproxy\\2.3.0\\yarp.reverseproxy.2.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}

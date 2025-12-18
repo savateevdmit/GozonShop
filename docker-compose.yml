@@ -1,0 +1,76 @@
+services:
+  postgres:
+    image: postgres:16
+    ports: ["5432:5432"]
+    environment:
+      POSTGRES_USER: gozon
+      POSTGRES_PASSWORD: gozon
+      POSTGRES_DB: gozon
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  orders:
+    build:
+      context: .
+      dockerfile: services/Orders.Service/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+    depends_on: [postgres, kafka]
+    ports: ["8081:8080"]
+
+  payments:
+    build:
+      context: .
+      dockerfile: services/Payments.Service/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+    depends_on: [postgres, kafka]
+    ports: ["8082:8080"]
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Gateway.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+    depends_on:
+      - orders
+      - payments
+    ports:
+        - "8080:8080"
+    
+
+  webui:
+    build:
+      context: .
+      dockerfile: frontend/Web.Ui/Dockerfile
+    depends_on: [gateway]
+    ports: ["8090:80"]
+
+volumes:
+  pgdata:
